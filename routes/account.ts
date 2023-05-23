@@ -5,7 +5,7 @@ import { ErrorBuilder, errors, HttpException } from "../errors.ts";
 
 const account = new Hono();
 
-account.get("/oauth/verify", async ctx => {
+account.get("/oauth/verify", ctx => {
     return ctx.json({
         "token": "1g63954g529b48b5a7084e6769cac7a5",
         "session_id": "1g63954g529b48b5a7084e6769cac7a5",
