@@ -4,20 +4,23 @@ import { version } from "./middleware/version.ts";
 import { HttpException, errors } from "./errors.ts";
 import { account } from "./routes/account.ts";
 import { lightswitch } from "./routes/lightswitch.ts";
-import { mcp } from "./routes/mcp.ts";
+import { fortnite } from "./routes/fortnite.ts";
 
 const serv = new Hono();
 
 serv.use("/:service/api/version", version);
 
-serv.onError((err: Error, ctx: Context) => ctx.json((err instanceof HttpException ? err as HttpException : new HttpException(errors.unknown)).build()));
+serv.onError((err: Error, ctx: Context) => {
+    const exception = err instanceof HttpException ? err as HttpException : new HttpException(errors.common.unknown_error);
+    return ctx.json(exception.build(), exception.httpStatus);
+});
 
 serv.get("/", ctx => {
     return ctx.json({ message: "Hello, selene!" });
 });
 
 serv.route("/account/api", account);
+serv.route("/fortnite/api", fortnite);
 serv.route("/lightswitch/api", lightswitch);
-serv.route("/fortnite/api", mcp);
 
 serve(serv.fetch, { port: 8080 });

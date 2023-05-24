@@ -4,7 +4,6 @@ const lightswitch = new Hono();
 
 lightswitch.get("/service/bulk/status", ctx => {
     const serviceId = ctx.req.query("serviceId");
-    
     return ctx.json(serviceId ? [
         {
             serviceInstanceId: serviceId,

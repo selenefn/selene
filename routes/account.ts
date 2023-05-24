@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.2.1/mod.ts";
-import { ErrorBuilder, errors, HttpException } from "../errors.ts";
+import { errors, HttpException } from "../errors.ts";
 // import { tbValidator } from "https://esm.sh/@hono/typebox-validator@0.1.1";
 // import { Type as T } from "https://esm.sh/@sinclair/typebox@0.28.11";
 
@@ -23,25 +23,31 @@ account.get("/oauth/verify", ctx => {
 
 account.post(
     "/oauth/token", async ctx => {
-        const { grant_type } = await ctx.req.parseBody();
+        const formData = await ctx.req.parseBody();
+        const { grant_type } = formData;
 
         switch (grant_type) {
             case "authorization_code":
+                const { code } = formData;
+                if (!code) throw new HttpException(errors.common.invalid_request).withMessage("code is required.");
                 break;
             case "client_credentials":
                 break;
-            case "device_auth":
-                break;
-            case "device_code":
-                break;
             case "exchange_code":
+                const { exchange_code } = formData;
+                if (!exchange_code) throw new HttpException(errors.common.invalid_request).withMessage("exchange_code is required.");
                 break;
             case "refresh_token":
+                const { refresh_token } = formData;
+                if (!refresh_token) throw new HttpException(errors.common.invalid_request).withMessage("refresh_token is required.");
                 break;
             case "password":
+                const { username, password } = formData;
+                if (!username) throw new HttpException(errors.common.invalid_request).withMessage("username is required.");
+                if (!password) throw new HttpException(errors.common.invalid_request).withMessage("password is required.");
                 break;
             default:
-                throw new HttpException(errors.unsupported_grant_type).with(grant_type.toString());
+                throw new HttpException(errors.oauth.unsupported_grant_type).withVars(grant_type.toString());
         };
 
         return ctx.json(grant_type === "client_credentials" ? {
