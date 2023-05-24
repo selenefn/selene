@@ -6,19 +6,19 @@ export async function createLogger(fpath: string) {
 
     return {
         info(...data: any[]) {
-            console.log(chalk.hex("#71abff")("[INFO]"), ...data);
+            console.log(chalk.hex("#d2bbe2")("[INFO]"), ...data);
             file.write(encoder.encode(`\n[${new Date().toLocaleString()}] [INFO] ${data}`));
         },
         debug(...data: any[]) {
-            console.log(chalk.hex("#b391ef")("[DEBUG]"), ...data);
+            console.log(chalk.hex("#71abff")("[DEBUG]"), ...data);
             file.write(encoder.encode(`\n[${new Date().toLocaleString()}] [DEBUG] ${data}`));
         },
         warn(...data: any[]) {
-            console.log(chalk.yellow("[WARN]"), ...data);
+            console.log(chalk.hex("#fff071")("[WARN]"), ...data);
             file.write(encoder.encode(`\n[${new Date().toLocaleString()}] [WARN] ${data}`));
         },
         error(...data: any[]) {
-            console.log(chalk.red("[ERROR]"), ...data);
+            console.log(chalk.hex("#ff6565")("[ERROR]"), ...data);
             file.write(encoder.encode(`\n[${new Date().toLocaleString()}] [ERROR] ${data}`));
         },
         fatal(...data: any[]) {

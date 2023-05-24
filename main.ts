@@ -8,8 +8,17 @@ import { lightswitch } from "./routes/lightswitch.ts";
 import { fortnite } from "./routes/fortnite.ts";
 import { Config, loadConfig } from "./common/config.ts";
 import { createLogger } from "./common/logger.ts";
+import chalk from "https://esm.sh/v124/chalk@5.2.0/source/index.js";
 
-export let log = await createLogger("log.txt");
+console.log(chalk.hex("#d2bbe2")(`
+ .|'''.|          '||                           
+ ||..  '    ....   ||    ....  .. ...     ....  
+  ''|||.  .|...||  ||  .|...||  ||  ||  .|...|| 
+.     '|| ||       ||  ||       ||  ||  ||      
+ |'...|'   '|...' .||.  '|...' .||. ||.  '|...'
+`))
+
+export const log = await createLogger("log.txt");
 
 export let config = {} as Config;
 try {
@@ -24,7 +33,7 @@ if (config.debug) serv.use("*", logger(log.debug));
 serv.use("/:service/api/version", version);
 
 serv.onError((err: Error, ctx: Context) => {
-    const exception = err instanceof HttpException ? err as HttpException : new HttpException(errors.common.unknown_error);
+    const exception = err instanceof HttpException ? err : new HttpException(errors.common.unknown_error);
     return ctx.json(exception.build(), exception.httpStatus);
 });
 
@@ -37,7 +46,7 @@ serv.route("/fortnite/api", fortnite);
 serv.route("/lightswitch/api", lightswitch);
 
 serve(serv.fetch, {
-    port: 8080,
+    port: config.port,
     onListen({ port, hostname }) {
         log.info(`Server started at http://${hostname}:${port}`);
     }
