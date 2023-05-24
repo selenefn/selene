@@ -1,7 +1,7 @@
 import { Hono } from "https://deno.land/x/hono@v3.2.1/mod.ts";
 import { crypto, toHashString } from "https://deno.land/std@0.188.0/crypto/mod.ts";
 import { exists } from "https://deno.land/std@0.188.0/fs/mod.ts";
-import { errors, HttpException } from "../errors.ts";
+import { errors, HttpException } from "../common/errors.ts";
 
 const cloudstorage = new Hono();
 
@@ -29,7 +29,7 @@ cloudstorage.get("/system", async ctx => {
 cloudstorage.get("/system/:filename", async ctx => {
     const { filename } = ctx.req.param();
     if (!await exists(`./hotfixes/${filename}`)) throw new HttpException(errors.cloudstorage.file_not_found).withVars(filename);
-
+    
     ctx.header("Content-Type", "text/plain");
     return ctx.body(await Deno.readFile(`./hotfixes/${filename}`));
 });

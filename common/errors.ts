@@ -38,9 +38,7 @@ export class ErrorBuilder {
             messageVars: this.messageVars,
             numericErrorCode: this.numericErrorCode,
             originatingService: "selene",
-            intent: "prod",
-            error_description: this.errorMessage,
-            error: this.errorCode
+            intent: "prod"
         };
     };
 };

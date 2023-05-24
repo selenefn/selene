@@ -1,5 +1,5 @@
 import { Hono } from "https://deno.land/x/hono@v3.2.1/mod.ts";
-import { errors, HttpException } from "../errors.ts";
+import { errors, HttpException } from "../common/errors.ts";
 // import { tbValidator } from "https://esm.sh/@hono/typebox-validator@0.1.1";
 // import { Type as T } from "https://esm.sh/@sinclair/typebox@0.28.11";
 
